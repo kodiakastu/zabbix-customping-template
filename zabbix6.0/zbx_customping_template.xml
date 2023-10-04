@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<zabbix_export>
+    <version>6.0</version>
+    <date>2023-10-04T02:43:22Z</date>
+    <groups>
+        <group>
+            <uuid>57b7ae836ca64446ba2c296389c009b7</uuid>
+            <name>Templates/Modules</name>
+        </group>
+    </groups>
+    <templates>
+        <template>
+            <uuid>6bf8b6f88a2e4262814fade3fb2ee4ac</uuid>
+            <template>ICMP Custom Ping</template>
+            <name>ICMP Custom Ping</name>
+            <description>Cloned from Template Module ICMP Ping. 
+Customize {$PING_TARGET} to your prefered target</description>
+            <groups>
+                <group>
+                    <name>Templates/Modules</name>
+                </group>
+            </groups>
+            <items>
+                <item>
+                    <uuid>65876aa2d150414e8d2fd0b19dfd125e</uuid>
+                    <name>ICMP: ICMP loss</name>
+                    <type>SIMPLE</type>
+                    <key>icmppingloss[{$PING_TARGET}]</key>
+                    <delay>5m</delay>
+                    <history>1w</history>
+                    <status>DISABLED</status>
+                    <value_type>FLOAT</value_type>
+                    <units>%</units>
+                    <tags>
+                        <tag>
+                            <tag>component</tag>
+                            <value>health</value>
+                        </tag>
+                        <tag>
+                            <tag>component</tag>
+                            <value>network</value>
+                        </tag>
+                    </tags>
+                    <triggers>
+                        <trigger>
+                            <uuid>effbfd9a22554adfb2e98619860b8911</uuid>
+                            <expression>min(/ICMP Custom Ping/icmppingloss[{$PING_TARGET}],5m)&gt;{$ICMP_LOSS_WARN} and min(/ICMP Custom Ping/icmppingloss[{$PING_TARGET}],5m)&lt;100</expression>
+                            <name>ICMP: High ICMP ping loss</name>
+                            <opdata>Loss: {ITEM.LASTVALUE1}</opdata>
+                            <status>DISABLED</status>
+                            <priority>WARNING</priority>
+                            <dependencies>
+                                <dependency>
+                                    <name>ICMP: Unavailable by ICMP ping</name>
+                                    <expression>max(/ICMP Custom Ping/icmpping[{$PING_TARGET},{$PING_PACKETS},{$PING_INTERVAL},{$PING_SIZE},{$PING_TIMEOUT}],#1)=0</expression>
+                                </dependency>
+                            </dependencies>
+                            <tags>
+                                <tag>
+                                    <tag>scope</tag>
+                                    <value>availability</value>
+                                </tag>
+                                <tag>
+                                    <tag>scope</tag>
+                                    <value>performance</value>
+                                </tag>
+                            </tags>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <uuid>531c6c888bdc44179c965b0cda97dacc</uuid>
+                    <name>ICMP: ICMP response time</name>
+                    <type>SIMPLE</type>
+                    <key>icmppingsec[{$PING_TARGET}]</key>
+                    <delay>5m</delay>
+                    <history>1w</history>
+                    <status>DISABLED</status>
+                    <value_type>FLOAT</value_type>
+                    <units>s</units>
+                    <tags>
+                        <tag>
+                            <tag>component</tag>
+                            <value>health</value>
+                        </tag>
+                        <tag>
+                            <tag>component</tag>
+                            <value>network</value>
+                        </tag>
+                    </tags>
+                    <triggers>
+                        <trigger>
+                            <uuid>f9d89a2890364b219a257bd564c13011</uuid>
+                            <expression>avg(/ICMP Custom Ping/icmppingsec[{$PING_TARGET}],5m)&gt;{$ICMP_RESPONSE_TIME_WARN}</expression>
+                            <name>ICMP: High ICMP ping response time</name>
+                            <opdata>Value: {ITEM.LASTVALUE1}</opdata>
+                            <status>DISABLED</status>
+                            <priority>WARNING</priority>
+                            <dependencies>
+                                <dependency>
+                                    <name>ICMP: High ICMP ping loss</name>
+                                    <expression>min(/ICMP Custom Ping/icmppingloss[{$PING_TARGET}],5m)&gt;{$ICMP_LOSS_WARN} and min(/ICMP Custom Ping/icmppingloss[{$PING_TARGET}],5m)&lt;100</expression>
+                                </dependency>
+                                <dependency>
+                                    <name>ICMP: Unavailable by ICMP ping</name>
+                                    <expression>max(/ICMP Custom Ping/icmpping[{$PING_TARGET},{$PING_PACKETS},{$PING_INTERVAL},{$PING_SIZE},{$PING_TIMEOUT}],#1)=0</expression>
+                                </dependency>
+                            </dependencies>
+                            <tags>
+                                <tag>
+                                    <tag>scope</tag>
+                                    <value>availability</value>
+                                </tag>
+                                <tag>
+                                    <tag>scope</tag>
+                                    <value>performance</value>
+                                </tag>
+                            </tags>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <uuid>a46c55445ddb4b268fa363b34532fd6b</uuid>
+                    <name>ICMP: ICMP ping</name>
+                    <type>SIMPLE</type>
+                    <key>icmpping[{$PING_TARGET},{$PING_PACKETS},{$PING_INTERVAL},{$PING_SIZE},{$PING_TIMEOUT}]</key>
+                    <delay>5m</delay>
+                    <history>1w</history>
+                    <valuemap>
+                        <name>Service state</name>
+                    </valuemap>
+                    <tags>
+                        <tag>
+                            <tag>component</tag>
+                            <value>health</value>
+                        </tag>
+                        <tag>
+                            <tag>component</tag>
+                            <value>network</value>
+                        </tag>
+                    </tags>
+                    <triggers>
+                        <trigger>
+                            <uuid>7b5f30333d994d58a24d15d72d64984d</uuid>
+                            <expression>max(/ICMP Custom Ping/icmpping[{$PING_TARGET},{$PING_PACKETS},{$PING_INTERVAL},{$PING_SIZE},{$PING_TIMEOUT}],#1)=0</expression>
+                            <name>ICMP: Unavailable by ICMP ping</name>
+                            <event_name>ICMP: Host {$PING_TARGET} is not responding to server</event_name>
+                            <priority>HIGH</priority>
+                            <description>Last attempt returned timeout.  Please check target.</description>
+                            <tags>
+                                <tag>
+                                    <tag>scope</tag>
+                                    <value>availability</value>
+                                </tag>
+                            </tags>
+                        </trigger>
+                    </triggers>
+                </item>
+            </items>
+            <macros>
+                <macro>
+                    <macro>{$ICMP_LOSS_WARN}</macro>
+                    <value>20</value>
+                </macro>
+                <macro>
+                    <macro>{$ICMP_RESPONSE_TIME_WARN}</macro>
+                    <value>0.15</value>
+                </macro>
+                <macro>
+                    <macro>{$PING_INTERVAL}</macro>
+                    <value>1000</value>
+                    <description>time to wait in ms between successive packets to an individual target. Default: 1000.</description>
+                </macro>
+                <macro>
+                    <macro>{$PING_PACKETS}</macro>
+                    <value>3</value>
+                    <description>number of request packets sent to a target. Default: 3.</description>
+                </macro>
+                <macro>
+                    <macro>{$PING_SIZE}</macro>
+                    <value>32</value>
+                    <description>packet size in bytes. Default: 56 on x86/68 on x86_64</description>
+                </macro>
+                <macro>
+                    <macro>{$PING_TARGET}</macro>
+                    <value>8.8.8.8</value>
+                    <description>Perform ping on that target</description>
+                </macro>
+                <macro>
+                    <macro>{$PING_TIMEOUT}</macro>
+                    <value>1000</value>
+                    <description>inherited from &quot;interval&quot; flag, but not more than 2000</description>
+                </macro>
+            </macros>
+            <valuemaps>
+                <valuemap>
+                    <uuid>e2f9524012614184b9ab63304ee3608c</uuid>
+                    <name>Service state</name>
+                    <mappings>
+                        <mapping>
+                            <value>0</value>
+                            <newvalue>Down</newvalue>
+                        </mapping>
+                        <mapping>
+                            <value>1</value>
+                            <newvalue>Up</newvalue>
+                        </mapping>
+                    </mappings>
+                </valuemap>
+            </valuemaps>
+        </template>
+    </templates>
+</zabbix_export>
