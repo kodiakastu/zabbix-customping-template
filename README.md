@@ -6,7 +6,8 @@ This template allows you to quickly customise ping parameters with macros per ho
 
 1. Select a branch according to your Zabbix version and download the xml.
 2. Import *zbx_customping_template.xml* to Zabbix (Configuration -> Templates -> Import)
-3. Add the template *ICMP Custom Ping* to your host and configure 
+3. Add the template *ICMP Custom Ping* to your host and configure
+4. Customize the macros to your needs!
 
 ## 🏷️ Features
 - ✔️ Customise ping target for loss and reponse time
